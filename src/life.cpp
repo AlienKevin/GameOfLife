@@ -127,11 +127,13 @@ void animate(int frames, Grid<string>& grid) {
 void tick(Grid<string>& grid) {
     Grid<string> copy(0, 0);
     copyGrid(grid, copy);
+    LifeGUI::resize(grid.numRows(), grid.numCols());
     for (int r = 0; r < grid.numRows(); r ++) {
         for (int c = 0; c < grid.numCols(); c ++) {
             singleCell(copy, grid, r, c);
         }
     }
+    LifeGUI::repaint();
     printGrid(grid);
 }
 
@@ -139,6 +141,10 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
     int numOfNeighbors = getNumOfNeighbors(r, c, copy);
     if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
         killCell(r, c, grid);
+    } else if (numOfNeighbors == 2) {
+        if (isCellOccupied(r, c, copy)) {
+            LifeGUI::fillCell(r, c);
+        }
     } else if (numOfNeighbors == 3) {
         createCell(r, c, grid);
     }
@@ -146,6 +152,7 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
 
 void createCell(int r, int c, Grid<string>& grid) {
     grid[r][c] = "X";
+    LifeGUI::fillCell(r, c);
 }
 
 void killCell(int r, int c, Grid<string>& grid) {
