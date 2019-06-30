@@ -16,6 +16,15 @@ void killCell(int r, int c, Grid<string>& copy);
 void createCell(int r, int c, Grid<string>& grid);
 void copyGrid(const Grid<string>& original, Grid<string>& copy);
 
+int main() {
+    introduce();
+    Grid<string> grid(0,0);
+    initialize(grid);
+
+    cout<<"Have a nice Life!"<<endl;
+    return 0;
+}
+
 void introduce(){
     cout<<"Welcome to the CS 106B/X Game of Life!"<<endl;
     cout<<"This program simulates the lifecycle of a bacterial colony."<<endl;
@@ -122,13 +131,4 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
             copy[r][c] = original[r][c];
         }
     }
-}
-
-int main() {
-    introduce();
-    Grid<string> grid(0,0);
-    initialize(grid);
-    //cout << dequoting(grid) << endl;
-    cout<<"Have a nice Life!"<<endl;
-    return 0;
 }
