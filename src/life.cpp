@@ -14,6 +14,7 @@ bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
 void killCell(int r, int c, Grid<string>& copy);
 void createCell(int r, int c, Grid<string>& grid);
+void copyGrid(const Grid<string>& original, Grid<string>& copy);
 
 void introduce(){
     cout<<"Welcome to the CS 106B/X Game of Life!"<<endl;
@@ -51,6 +52,16 @@ void initialize(Grid<string>& grid){
         count++;
     }
 
+}
+
+void tick(Grid<string>& grid) {
+    Grid<string> copy(0, 0);
+    copyGrid(grid, copy);
+    for (int r = 0; r < grid.numRows(); r ++) {
+        for (int c = 0; c < grid.numCols(); c ++) {
+            singleCell(copy, grid, r, c);
+        }
+    }
 }
 
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
@@ -102,6 +113,15 @@ int getNumOfNeighbors(int r, int c, const Grid<string>& copy) {
             isCellOccupied(r + 1, c - 1, copy) + isCellOccupied(r + 1, c + 1, copy) +
             isCellOccupied(r - 1, c, copy) + isCellOccupied(r + 1, c, copy) +
             isCellOccupied(r, c - 1, copy) + isCellOccupied(r, c + 1, copy);
+}
+
+void copyGrid(const Grid<string>& original, Grid<string>& copy) {
+    copy.resize(original.numRows(), original.numCols());
+    for (int r = 0; r < original.numRows(); r ++) {
+        for (int c = 0; c < original.numCols(); c ++) {
+            copy[r][c] = original[r][c];
+        }
+    }
 }
 
 int main() {
