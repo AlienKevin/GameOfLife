@@ -27,6 +27,7 @@ void updateGUI(const Grid<string>& grid);
 
 int main() {
     introduce();
+    LifeGUI::initialize();
     runGame();
     cout<<"Have a nice Life!"<<endl;
     return 0;
@@ -36,7 +37,6 @@ void runGame() {
     Grid<string> grid(0,0);
     initializeGame(grid);
     printGrid(grid);
-    LifeGUI::initialize();
     showGUI(grid);
     promptAction(grid);
 }
@@ -82,6 +82,7 @@ void initializeGame(Grid<string>& grid){
 void showGUI(const Grid<string>& grid) {
     LifeGUI::resize(grid.numRows(), grid.numCols());
     updateGUI(grid);
+    LifeGUI::repaint();
 }
 
 void updateGUI(const Grid<string>& grid) {
