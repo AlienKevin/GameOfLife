@@ -5,10 +5,13 @@
 #include "strlib.h"
 #include <fstream>
 #include "filelib.h"
+#include "simpio.h"
 using namespace std;
 
 void introduce();
 void initialize(Grid<string>& grid);
+void tick(Grid<string>& grid);
+void promptAction(Grid<string>& grid);
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
@@ -22,7 +25,7 @@ int main() {
     Grid<string> grid(0,0);
     initialize(grid);
     printGrid(grid);
-
+    promptAction(grid);
     cout<<"Have a nice Life!"<<endl;
     return 0;
 }
@@ -63,6 +66,14 @@ void initialize(Grid<string>& grid){
         count++;
     }
 
+}
+
+void promptAction(Grid<string>& grid) {
+    string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
+    if (actionName == "t") {
+        tick(grid);
+    }
+    promptAction(grid);
 }
 
 void tick(Grid<string>& grid) {
