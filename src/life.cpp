@@ -174,9 +174,9 @@ bool isCellOccupied(int r, int c, const Grid<string>& copy) {
     string cell = copy[r][c];
 
     if (cell == "X") {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy) {
