@@ -11,6 +11,7 @@ void introduce();
 void initialize(Grid<string>& grid);
 void singleCell(Grid<string> copy, Grid<string>& original, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
+int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
 void killCell(int r, int c, Grid<string>& copy);
 void createCell(int r, int c, Grid<string>& grid);
 
@@ -53,9 +54,8 @@ void initialize(Grid<string>& grid){
 }
 
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
-    int numOfNeighbors = numOfNeighbors(r, c, copy);
-    // 0 - 1 nieghbor: die
-    if (numOfNeighbors <= 1) {
+    int numOfNeighbors = getNumOfNeighbors(r, c, copy);
+    if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
         killCell(r, c, grid);
     } else if (numOfNeighbors == 3) {
         createCell(r, c, grid);
@@ -97,7 +97,7 @@ bool isCellOccupied(int r, int c, const Grid<string>& copy) {
     return 0;
 }
 
-int numOfNeighbors(int r, int c, const Grid<string>& copy) {
+int getNumOfNeighbors(int r, int c, const Grid<string>& copy) {
     return isCellOccupied(r - 1, c - 1, copy) + isCellOccupied(r - 1, c + 1, copy) +
             isCellOccupied(r + 1, c - 1, copy) + isCellOccupied(r + 1, c + 1, copy) +
             isCellOccupied(r - 1, c, copy) + isCellOccupied(r + 1, c, copy) +
