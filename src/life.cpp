@@ -15,6 +15,7 @@ int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
 void killCell(int r, int c, Grid<string>& copy);
 void createCell(int r, int c, Grid<string>& grid);
 void copyGrid(const Grid<string>& original, Grid<string>& copy);
+void printGrid(const Grid<string>& grid);
 
 int main() {
     introduce();
@@ -130,5 +131,15 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
         for (int c = 0; c < original.numCols(); c ++) {
             copy[r][c] = original[r][c];
         }
+    }
+}
+
+void printGrid(const Grid<string>& grid) {
+    for (int r = 0; r < grid.numRows(); r ++) {
+        string row = "";
+        for (int c = 0; c < grid.numCols(); c ++) {
+            row += grid[r][c];
+        }
+        cout << row << endl;
     }
 }
