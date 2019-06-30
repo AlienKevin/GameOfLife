@@ -184,5 +184,7 @@ void printGrid(const Grid<string>& grid) {
         }
         output += "\n";
     }
+    // How to flush the cout buffer in Visual C++
+    // https://support.microsoft.com/en-us/help/94227/how-to-flush-the-cout-buffer-in-visual-c
     cout << output << flush;
 }
