@@ -177,11 +177,12 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
 }
 
 void printGrid(const Grid<string>& grid) {
+    string output = "";
     for (int r = 0; r < grid.numRows(); r ++) {
-        string row = "";
         for (int c = 0; c < grid.numCols(); c ++) {
-            row += grid[r][c];
+            output += grid[r][c];
         }
-        cout << row << endl;
+        output += "\n";
     }
+    cout << output << flush;
 }
