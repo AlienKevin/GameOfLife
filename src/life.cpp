@@ -1,5 +1,3 @@
-// This is the CPP file you will edit and turn in. (Remove this comment!)
-
 #include <iostream>
 #include "console.h"
 #include "lifegui.h"
@@ -53,19 +51,6 @@ void initialize(Grid<string>& grid){
 }
 
 void singleCell(const Grid<string>& copy, Grid<string>& original, int r, int c){
-//    int endRow = original.numRows() - 1;
-//    int endCol= original.numCols() - 1;
-//    if (row == 0 && col == 0) { // top left corner
-//        numOfNeighbors();
-//    } else if (row == 0 && col == endCol) { // top right corner
-
-//    } else if (row == endRow && col == 0) { // bottom left corner
-
-//    } else if (row == endRow && col == endCol) { // bottom right corner
-
-//    } else { // in the middle somewhere
-
-//    }
     int numOfNeighbors = numOfNeighbors(r, c, copy);
 
 }
@@ -74,12 +59,15 @@ bool isCellOccupied(int r, int c, Grid<string>& copy) {
     int endRow = copy.numRows() - 1;
     int endCol = copy.numCols() - 1;
 
+    // wraps around in both dimensions
+    // top-most and bottom-most rows are neighbors
     if (r == -1) {
         r = endRow;
     } else if (r == endRow + 1) {
         r = 0;
     }
 
+    // left-most and right-most columns are neighbors
     if (c == -1) {
         c = endCol;
     } else if (c == endCol + 1) {
@@ -100,14 +88,6 @@ int numOfNeighbors(int r, int c, const Grid<string>& copy) {
             isCellOccupied(r - 1, c, copy) + isCellOccupied(r + 1, c, copy) +
             isCellOccupied(r, c - 1, copy) + isCellOccupied(r, c + 1, copy);
 }
-
-//string dequoting(Grid<string> grid){
-//    string result = "";
-//    for(string n: grid){
-//        result.append(n);
-//    }
-//    return result;
-//}
 
 int main() {
     introduce();
