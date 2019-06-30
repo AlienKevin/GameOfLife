@@ -9,9 +9,11 @@
 using namespace std;
 
 void introduce();
+void runGame();
 void initialize(Grid<string>& grid);
 void tick(Grid<string>& grid);
 void promptAction(Grid<string>& grid);
+void loadAnotherFile();
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
@@ -22,12 +24,16 @@ void printGrid(const Grid<string>& grid);
 
 int main() {
     introduce();
+    runGame();
+    cout<<"Have a nice Life!"<<endl;
+    return 0;
+}
+
+void runGame() {
     Grid<string> grid(0,0);
     initialize(grid);
     printGrid(grid);
     promptAction(grid);
-    cout<<"Have a nice Life!"<<endl;
-    return 0;
 }
 
 void introduce(){
@@ -72,8 +78,17 @@ void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
     if (actionName == "t") {
         tick(grid);
+    } else if (actionName == "q") {
+        loadAnotherFile();
+        return;
     }
     promptAction(grid);
+}
+
+void loadAnotherFile() {
+    if (getYesOrNo("Load another file? (y/n) ")) {
+        runGame();
+    }
 }
 
 void tick(Grid<string>& grid) {
@@ -84,6 +99,7 @@ void tick(Grid<string>& grid) {
             singleCell(copy, grid, r, c);
         }
     }
+    printGrid(grid);
 }
 
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
