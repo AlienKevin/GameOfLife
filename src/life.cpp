@@ -10,7 +10,7 @@ using namespace std;
 
 void introduce();
 void runGame();
-void initialize(Grid<string>& grid);
+void initializeGame(Grid<string>& grid);
 void tick(Grid<string>& grid);
 void promptAction(Grid<string>& grid);
 void loadAnotherFile();
@@ -32,7 +32,7 @@ int main() {
 
 void runGame() {
     Grid<string> grid(0,0);
-    initialize(grid);
+    initializeGame(grid);
     printGrid(grid);
     promptAction(grid);
 }
@@ -47,7 +47,7 @@ void introduce(){
     cout<<"* A cell with 4 or more neighbors dies."<<endl;
 }
 
-void initialize(Grid<string>& grid){
+void initializeGame(Grid<string>& grid){
     int row;
     int col;
     ifstream file;
@@ -74,6 +74,8 @@ void initialize(Grid<string>& grid){
     }
 
 }
+
+void showGUI()
 
 void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
