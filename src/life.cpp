@@ -14,6 +14,7 @@ void initialize(Grid<string>& grid);
 void tick(Grid<string>& grid);
 void promptAction(Grid<string>& grid);
 void loadAnotherFile();
+void animate(int frames, Grid<string>& grid);
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
@@ -78,6 +79,11 @@ void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
     if (actionName == "t") {
         tick(grid);
+    } else if (actionName == "a") {
+        int frames = getInteger("How many frames? ");
+        if (frames > 0) {
+            animate(frames, grid);
+        }
     } else if (actionName == "q") {
         loadAnotherFile();
         return;
@@ -88,6 +94,14 @@ void promptAction(Grid<string>& grid) {
 void loadAnotherFile() {
     if (getYesOrNo("Load another file? (y/n) ")) {
         runGame();
+    }
+}
+
+void animate(int frames, Grid<string>& grid) {
+    for (int i = 0; i < frames; i++) {
+        tick(grid);
+        pause(100);
+        clearConsole();
     }
 }
 
