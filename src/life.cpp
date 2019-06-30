@@ -10,7 +10,9 @@ using namespace std;
 void introduce();
 void initialize(Grid<string>& grid);
 void singleCell(Grid<string> copy, Grid<string>& original, int r, int c);
-bool isCellOccupied(int r, int c, Grid<string> copy);
+bool isCellOccupied(int r, int c, const Grid<string>& copy);
+void killCell(int r, int c, Grid<string>& copy);
+void createCell(int r, int c, Grid<string>& grid);
 
 void introduce(){
     cout<<"Welcome to the CS 106B/X Game of Life!"<<endl;
@@ -50,12 +52,25 @@ void initialize(Grid<string>& grid){
 
 }
 
-void singleCell(const Grid<string>& copy, Grid<string>& original, int r, int c){
+void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
     int numOfNeighbors = numOfNeighbors(r, c, copy);
-
+    // 0 - 1 nieghbor: die
+    if (numOfNeighbors <= 1) {
+        killCell(r, c, grid);
+    } else if (numOfNeighbors == 3) {
+        createCell(r, c, grid);
+    }
 }
 
-bool isCellOccupied(int r, int c, Grid<string>& copy) {
+void createCell(int r, int c, Grid<string>& grid) {
+    grid[r][c] = "X";
+}
+
+void killCell(int r, int c, Grid<string>& grid) {
+    grid[r][c] = "-";
+}
+
+bool isCellOccupied(int r, int c, const Grid<string>& copy) {
     int endRow = copy.numRows() - 1;
     int endCol = copy.numCols() - 1;
 
