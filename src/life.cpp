@@ -22,6 +22,8 @@ void killCell(int r, int c, Grid<string>& copy);
 void createCell(int r, int c, Grid<string>& grid);
 void copyGrid(const Grid<string>& original, Grid<string>& copy);
 void printGrid(const Grid<string>& grid);
+void showGUI(const Grid<string>& grid);
+void updateGUI(const Grid<string>& grid);
 
 int main() {
     introduce();
@@ -34,6 +36,8 @@ void runGame() {
     Grid<string> grid(0,0);
     initializeGame(grid);
     printGrid(grid);
+    LifeGUI::initialize();
+    showGUI(grid);
     promptAction(grid);
 }
 
@@ -75,7 +79,20 @@ void initializeGame(Grid<string>& grid){
 
 }
 
-void showGUI()
+void showGUI(const Grid<string>& grid) {
+    LifeGUI::resize(grid.numRows(), grid.numCols());
+    updateGUI(grid);
+}
+
+void updateGUI(const Grid<string>& grid) {
+    for (int r = 0; r < grid.numRows(); r++) {
+        for (int c = 0; c < grid.numCols(); c++) {
+            if (isCellOccupied(r, c, grid)) {
+                LifeGUI::fillCell(r, c);
+            }
+        }
+    }
+}
 
 void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
