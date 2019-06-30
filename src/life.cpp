@@ -9,7 +9,7 @@ using namespace std;
 
 void introduce();
 void initialize(Grid<string>& grid);
-void singleCell(Grid<string> copy, Grid<string>& original, int r, int c);
+void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
 void killCell(int r, int c, Grid<string>& copy);
@@ -21,6 +21,7 @@ int main() {
     introduce();
     Grid<string> grid(0,0);
     initialize(grid);
+    printGrid(grid);
 
     cout<<"Have a nice Life!"<<endl;
     return 0;
