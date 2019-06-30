@@ -76,7 +76,7 @@ void initializeGame(Grid<string>& grid){
 
         count++;
     }
-
+    file.close();
 }
 
 void showGUI(const Grid<string>& grid) {
