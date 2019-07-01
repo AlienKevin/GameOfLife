@@ -42,13 +42,13 @@ void runGame() {
 }
 
 void introduce(){
-    cout<<"Welcome to the CS 106B/X Game of Life!"<<endl;
-    cout<<"This program simulates the lifecycle of a bacterial colony."<<endl;
-    cout<<"Cells (X) live and die by the following rules:"<<endl;
-    cout<<"* A cell with 1 or fewer neighbors dies."<<endl;
-    cout<<"* Locations with 2 neighbors remain stable."<<endl;
-    cout<<"* Locations with 3 neighbors will create life."<<endl;
-    cout<<"* A cell with 4 or more neighbors dies."<<endl;
+    cout << "Welcome to the CS 106B/X Game of Life!" << endl;
+    cout << "This program simulates the lifecycle of a bacterial colony." << endl;
+    cout << "Cells (X) live and die by the following rules:" << endl;
+    cout << "* A cell with 1 or fewer neighbors dies." << endl;
+    cout << "* Locations with 2 neighbors remain stable." << endl;
+    cout << "* Locations with 3 neighbors will create life." << endl;
+    cout << "* A cell with 4 or more neighbors dies." << endl;
 }
 
 void initializeGame(Grid<string>& grid){
@@ -57,23 +57,23 @@ void initializeGame(Grid<string>& grid){
     ifstream file;
     promptUserForFile(file, "Grid input file name? ");
     string line;
-    int count=0;
-    while(getline(file,line)){
+    int count = 0;
+    while(getline(file, line)) {
         if (count == 0) {
             row= stringToInteger(line);
         } else if(count == 1) {
             col= stringToInteger(line);
-        } else if (count > row + 2){
+        } else if (count > row + 2) {
             break;
         } else {
-            if(grid.size()==0){
-                grid.resize(row,col);}
-                int gridRow = count - 2;
-                for(int gridCol=0; gridCol<line.length();gridCol++){
-                    grid.set(gridRow, gridCol, line.substr(gridCol,1));
-                }
+            if(grid.size() == 0){
+                grid.resize(row, col);
+            }
+            int gridRow = count - 2;
+            for(int gridCol = 0; gridCol < line.length();gridCol++){
+                grid.set(gridRow, gridCol, line.substr(gridCol, 1));
+            }
         }
-
         count++;
     }
     file.close();
@@ -129,8 +129,8 @@ void tick(Grid<string>& grid) {
     Grid<string> copy(0, 0);
     copyGrid(grid, copy);
     LifeGUI::resize(grid.numRows(), grid.numCols());
-    for (int r = 0; r < grid.numRows(); r ++) {
-        for (int c = 0; c < grid.numCols(); c ++) {
+    for (int r = 0; r < grid.numRows(); r++) {
+        for (int c = 0; c < grid.numCols(); c++) {
             singleCell(copy, grid, r, c);
         }
     }
