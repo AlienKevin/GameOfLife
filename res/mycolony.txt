@@ -14,4 +14,7 @@ XX-XXXXX-XX
 ------X----
 ------X----
 
-#This is a Chinese word which means "life".
+# This is a Chinese word (pronounced "ming") which means "life". Throughout the simulation, this character
+# undergoes near disappearance and resurgence and ended up disappearing after 104 steps. We think that the
+# fluctuation of the simulation symbolizes the ups and downs in life and the fact that the cells never form back
+# into the original character symbolizes that there's no way to turn back in life and everyone is always changing # and evolving.
