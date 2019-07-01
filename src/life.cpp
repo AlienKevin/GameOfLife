@@ -1,3 +1,12 @@
+/* Game of Life assignment for CS106B in Stanford Summer Session
+ * Authors: Bruce Yang and Kevin Li
+ * Description: The Game of Life is a simulation by British mathematician J. H. Conway in 1970. The game models
+ * the life cycle of bacteria using a two-dimensional grid of cells. Given an initial pattern, the game
+ * simulates the birth and death of future generations of cells using a set of simple rules.
+ * Citations:
+ * How to flush the cout buffer in Visual C++
+ * https://support.microsoft.com/en-us/help/94227/how-to-flush-the-cout-buffer-in-visual-c
+ */
 #include <iostream>
 #include "console.h"
 #include "lifegui.h"
@@ -213,7 +222,5 @@ void printGrid(const Grid<string>& grid) {
         }
         output += "\n";
     }
-    // How to flush the cout buffer in Visual C++
-    // https://support.microsoft.com/en-us/help/94227/how-to-flush-the-cout-buffer-in-visual-c
     cout << output << flush;
 }
