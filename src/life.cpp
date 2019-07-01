@@ -48,7 +48,7 @@ void introduce(){
     cout << "* A cell with 1 or fewer neighbors dies." << endl;
     cout << "* Locations with 2 neighbors remain stable." << endl;
     cout << "* Locations with 3 neighbors will create life." << endl;
-    cout << "* A cell with 4 or more neighbors dies." << endl;
+    cout << "* A cell with 4 or more neighbors dies.\n" << endl;
 }
 
 void initializeGame(Grid<string>& grid){
@@ -107,6 +107,8 @@ void promptAction(Grid<string>& grid) {
     } else if (actionName == "q") {
         loadAnotherFile();
         return;
+    } else {
+        cout << "Invalid choice; please try again." << endl;
     }
     promptAction(grid);
 }
