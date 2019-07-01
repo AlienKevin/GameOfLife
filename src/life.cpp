@@ -97,7 +97,7 @@ void updateGUI(const Grid<string>& grid) {
 
 void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
-    if (actionName == "t") {
+    if (actionName == "t" || actionName == "") {
         tick(grid);
     } else if (actionName == "a") {
         int frames = getInteger("How many frames? ");
