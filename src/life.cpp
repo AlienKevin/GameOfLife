@@ -42,6 +42,11 @@ int main() {
     return 0;
 }
 
+/*
+ * Start running the simulation.
+ * This function is called every time a new file is loaded
+ * @precondition LifeGUI::initialize() is run to make sure that GUI is started
+ */
 void runGame() {
     Grid<string> grid(0,0);
     initializeGame(grid);
@@ -50,6 +55,9 @@ void runGame() {
     promptAction(grid);
 }
 
+/*
+ * Print out introduction.
+ */
 void introduce(){
     cout << "Welcome to the CS 106B/X Game of Life!" << endl;
     cout << "This program simulates the lifecycle of a bacterial colony." << endl;
@@ -60,6 +68,10 @@ void introduce(){
     cout << "* A cell with 4 or more neighbors dies.\n" << endl;
 }
 
+/*
+ * Initialize the grid using the input text file.
+ * @param grid the simulation grid
+ */
 void initializeGame(Grid<string>& grid){
     int row;
     int col;
@@ -79,7 +91,7 @@ void initializeGame(Grid<string>& grid){
                 grid.resize(row, col);
             }
             int gridRow = count - 2;
-            for(int gridCol = 0; gridCol < line.length();gridCol++){
+            for(int gridCol = 0; gridCol < line.length(); gridCol++){
                 grid.set(gridRow, gridCol, line.substr(gridCol, 1));
             }
         }
@@ -88,12 +100,20 @@ void initializeGame(Grid<string>& grid){
     file.close();
 }
 
+/*
+ * Show the GUI of the simulation.
+ * @param grid the simulation grid
+ */
 void showGUI(const Grid<string>& grid) {
     LifeGUI::resize(grid.numRows(), grid.numCols());
     updateGUI(grid);
     LifeGUI::repaint();
 }
 
+/*
+ * Update the GUI of the simulation (create/kill cells).
+ * @param grid the simulation grid
+ */
 void updateGUI(const Grid<string>& grid) {
     for (int r = 0; r < grid.numRows(); r++) {
         for (int c = 0; c < grid.numCols(); c++) {
@@ -104,6 +124,15 @@ void updateGUI(const Grid<string>& grid) {
     }
 }
 
+/*
+ * Prompt the user for actions.
+ *
+ * Type "t" or press ENTER for running a tick
+ * Type "a" for running multiple ticks in an animation
+ * Type "q" to quit the program or load a new input file
+ *
+ * @param grid the simulation grid
+ */
 void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
     if (actionName == "t" || actionName == "") {
@@ -122,12 +151,23 @@ void promptAction(Grid<string>& grid) {
     promptAction(grid);
 }
 
+/*
+ * Prompt the user to load a new file or end the simulation.
+ */
 void loadAnotherFile() {
     if (getYesOrNo("Load another file? (y/n) ")) {
         runGame();
     }
 }
 
+/*
+ * Run an animation a number of frames.
+ *
+ * Basically tick, wait for 100ms, and repeat these two steps for a number of times.
+ *
+ * @param frames the number of frames to repeat
+ * @param grid   the simulation grid
+ */
 void animate(int frames, Grid<string>& grid) {
     for (int i = 0; i < frames; i++) {
         tick(grid);
@@ -136,6 +176,10 @@ void animate(int frames, Grid<string>& grid) {
     }
 }
 
+/*
+ * Advance the simulation one generation forward.
+ * @param grid the simulation grid
+ */
 void tick(Grid<string>& grid) {
     Grid<string> copy(0, 0);
     copyGrid(grid, copy);
@@ -149,7 +193,14 @@ void tick(Grid<string>& grid) {
     printGrid(grid);
 }
 
-void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
+/*
+ * Test if a single cell should be killed, created, or stay the same.
+ * @param copy the copied version of the simulation grid that stays the same
+ * @param grid the simulation grid that is modified
+ * @param r    the row index of the cell to test
+ * @param c    the column index of the cell to test
+ */
+void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
     int numOfNeighbors = getNumOfNeighbors(r, c, copy);
     if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
         killCell(r, c, grid);
@@ -162,15 +213,33 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c){
     }
 }
 
+/*
+ * Create a new cell at (r, c) in the simulation grid.
+ * @param r    the row index of the cell to create
+ * @param c    the column index of the cell to create
+ * @param grid the simulation grid
+ */
 void createCell(int r, int c, Grid<string>& grid) {
     grid[r][c] = "X";
     LifeGUI::fillCell(r, c);
 }
 
+/*
+ * Kill the cell at (r, c) in the simulation grid.
+ * @param r    the row index of the cell to create
+ * @param c    the column index of the cell to create
+ * @param grid the simulation grid
+ */
 void killCell(int r, int c, Grid<string>& grid) {
     grid[r][c] = "-";
 }
 
+/*
+ * Check if the cell at (r, c) in the simulation grid is occupied or not.
+ * @param r    the row index of the cell to create
+ * @param c    the column index of the cell to create
+ * @param copy the copied version of the simulation grid that stays the same
+ */
 bool isCellOccupied(int r, int c, const Grid<string>& copy) {
     int endRow = copy.numRows() - 1;
     int endCol = copy.numCols() - 1;
@@ -198,6 +267,12 @@ bool isCellOccupied(int r, int c, const Grid<string>& copy) {
     return false;
 }
 
+/*
+ * Get the number of neighbors of the cell at (r, c) in the grid.
+ * @param r    the row index of the cell to create
+ * @param c    the column index of the cell to create
+ * @param copy the copied version of the simulation grid that stays the same
+ */
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy) {
     return isCellOccupied(r - 1, c - 1, copy) + isCellOccupied(r - 1, c + 1, copy) +
             isCellOccupied(r + 1, c - 1, copy) + isCellOccupied(r + 1, c + 1, copy) +
@@ -205,6 +280,11 @@ int getNumOfNeighbors(int r, int c, const Grid<string>& copy) {
             isCellOccupied(r, c - 1, copy) + isCellOccupied(r, c + 1, copy);
 }
 
+/*
+ * Copy a grid.
+ * @param original the grid to copy from
+ * @param copy     the new grid to copy to
+ */
 void copyGrid(const Grid<string>& original, Grid<string>& copy) {
     copy.resize(original.numRows(), original.numCols());
     for (int r = 0; r < original.numRows(); r ++) {
@@ -214,6 +294,10 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
     }
 }
 
+/*
+ * Print a grid in 2D
+ * @param grid the grid to print
+ */
 void printGrid(const Grid<string>& grid) {
     string output = "";
     for (int r = 0; r < grid.numRows(); r ++) {
