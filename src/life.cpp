@@ -15,10 +15,15 @@
 #include <fstream>
 #include "filelib.h"
 #include "simpio.h"
+#include "random.h"
 using namespace std;
+
+const int MAX_ROW_LENGTH = 50;
+const int MAX_COLUMN_LENGTH = 50;
 
 void introduce();
 void runGame();
+bool promptForInput(ifstream& file);
 void initializeGame(Grid<string>& grid);
 void tick(Grid<string>& grid);
 void promptAction(Grid<string>& grid);
@@ -76,28 +81,60 @@ void initializeGame(Grid<string>& grid){
     int row;
     int col;
     ifstream file;
-    promptUserForFile(file, "Grid input file name? ");
-    string line;
-    int count = 0;
-    while(getline(file, line)) {
-        if (count == 0) {
-            row= stringToInteger(line);
-        } else if(count == 1) {
-            col= stringToInteger(line);
-        } else if (count > row + 2) {
-            break;
-        } else {
-            if(grid.size() == 0){
-                grid.resize(row, col);
+    if (promptForInput(file)) { // a filename is inputed
+        string line;
+        int count = 0;
+        while(getline(file, line)) {
+            if (count == 0) {
+                row= stringToInteger(line);
+            } else if(count == 1) {
+                col= stringToInteger(line);
+            } else if (count > row + 2) {
+                break;
+            } else {
+                if(grid.size() == 0){
+                    grid.resize(row, col);
+                }
+                int gridRow = count - 2;
+                for(int gridCol = 0; gridCol < line.length(); gridCol++){
+                    grid.set(gridRow, gridCol, line.substr(gridCol, 1));
+                }
             }
-            int gridRow = count - 2;
-            for(int gridCol = 0; gridCol < line.length(); gridCol++){
-                grid.set(gridRow, gridCol, line.substr(gridCol, 1));
+            count++;
+        }
+        file.close();
+    } else { // generate a random world
+        // randomly generate grid's row and column length
+        row = randomInteger(3, MAX_ROW_LENGTH);
+        col = randomInteger(3, MAX_COLUMN_LENGTH);
+
+        grid.resize(row, col);
+
+        // randomly fill the grid
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                bool createNewCell = randomBool();
+                if (createNewCell) {
+                    grid[r][c] = "X";
+                } else {
+                    grid[r][c] = "-";
+                }
             }
         }
-        count++;
     }
-    file.close();
+}
+
+bool promptForInput(ifstream& file) {
+    string filename = "";
+    while (!fileExists(filename) && filename != "random") {
+        filename = getLine("Grid input file name? (or random)");
+    }
+    if (filename == "random") {
+        return false;
+    } else {
+        openFile(file, filename);
+        return true;
+    }
 }
 
 /*
