@@ -25,7 +25,7 @@ void introduce();
 void runGame();
 bool promptForInput(ifstream& file);
 void initializeGame(Grid<string>& grid);
-void tick(Grid<string>& grid);
+bool tick(Grid<string>& grid);
 void promptAction(Grid<string>& grid);
 void loadAnotherFile();
 void animate(int frames, Grid<string>& grid);
@@ -173,7 +173,10 @@ void updateGUI(const Grid<string>& grid) {
 void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
     if (actionName == "t" || actionName == "") {
-        tick(grid);
+        bool keepRunning = tick(grid);
+        if (!keepRunning) {
+            cout << "No grid is displayed because this world is stable." << endl;
+        }
     } else if (actionName == "a") {
         int frames = getInteger("How many frames? ");
         if (frames > 0) {
@@ -207,9 +210,14 @@ void loadAnotherFile() {
  */
 void animate(int frames, Grid<string>& grid) {
     for (int i = 0; i < frames; i++) {
-        tick(grid);
-        pause(100);
-        clearConsole();
+        bool keepRunning = tick(grid);
+        if (keepRunning) {
+            pause(100);
+            clearConsole();
+        } else {
+            cout << "animation ended at " << i << " frames because the world is stable." << endl;
+            break;
+        }
     }
 }
 
@@ -217,7 +225,7 @@ void animate(int frames, Grid<string>& grid) {
  * Advance the simulation one generation forward.
  * @param grid the simulation grid
  */
-void tick(Grid<string>& grid) {
+bool tick(Grid<string>& grid) {
     Grid<string> copy(0, 0);
     copyGrid(grid, copy);
     LifeGUI::resize(grid.numRows(), grid.numCols());
@@ -226,8 +234,13 @@ void tick(Grid<string>& grid) {
             singleCell(copy, grid, r, c);
         }
     }
-    LifeGUI::repaint();
-    printGrid(grid);
+    if (grid == copy) { // no change after this generation
+        return false;
+    } else {
+        LifeGUI::repaint();
+        printGrid(grid);
+        return true;
+    }
 }
 
 /*
