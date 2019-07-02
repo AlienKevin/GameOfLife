@@ -212,7 +212,8 @@ PRECOMPILED_HEADER = $$files($$PWD/lib/StanfordCPPLib/private/precompiled.h)
 # To get around this, we follow the first 'SOURCES *=' line by a line that clears
 # out SOURCES, so that the Qt Creator .pro modification is ineffectual.
 DISTFILES *= "" \
-    README.md
+    README.md \
+    res/mycolony-stable.txt
 DISTFILES = ""
 HEADERS *= ""
 HEADERS = ""

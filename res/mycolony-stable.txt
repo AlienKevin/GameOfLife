@@ -1,0 +1,12 @@
+8
+12
+-----X-----X
+----X-X-----
+----X--X----
+-----XX-----
+------------
+X----------X
+-X--------X-
+X---------X-
+
+# This is a stable world that will never change.
