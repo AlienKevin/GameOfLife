@@ -124,6 +124,11 @@ void initializeGame(Grid<string>& grid){
     }
 }
 
+/*
+ * Prompt the user for input file name and the user can type "random" to generate a random grid.
+ * @param file the input file variable to assign to if user input is not "random"
+ * @return true if the user inputted a valid file name, false if user inputted "random"
+ */
 bool promptForInput(ifstream& file) {
     string filename = "";
     while (!fileExists(filename) && filename != "random") {
@@ -174,7 +179,7 @@ void promptAction(Grid<string>& grid) {
     string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
     if (actionName == "t" || actionName == "") {
         bool keepRunning = tick(grid);
-        if (!keepRunning) {
+        if (!keepRunning) { // the grid is stable
             cout << "No grid is displayed because this world is stable." << endl;
         }
     } else if (actionName == "a") {
@@ -211,10 +216,10 @@ void loadAnotherFile() {
 void animate(int frames, Grid<string>& grid) {
     for (int i = 0; i < frames; i++) {
         bool keepRunning = tick(grid);
-        if (keepRunning) {
+        if (keepRunning) { // the grid is changing (not stable)
             pause(100);
             clearConsole();
-        } else {
+        } else { // the grid is stable
             cout << "animation ended at " << i << " frames because the world is stable." << endl;
             break;
         }
@@ -223,7 +228,8 @@ void animate(int frames, Grid<string>& grid) {
 
 /*
  * Advance the simulation one generation forward.
- * @param grid the simulation grid
+ * @param  grid the simulation grid
+ * @return true if the grid changes after this generation and false if the grid is stable
  */
 bool tick(Grid<string>& grid) {
     Grid<string> copy(0, 0);
