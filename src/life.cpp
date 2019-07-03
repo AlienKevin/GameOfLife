@@ -96,15 +96,16 @@ void initializeGame(Grid<string>& grid){
                 row= stringToInteger(line);
             } else if(count == 1) {
                 col= stringToInteger(line);
-            } else if (count > row + 2) {
-                break;
             } else {
-                if(grid.size() == 0){
+                if (grid.size() == 0){
                     grid.resize(row, col);
                 }
                 int gridRow = count - 2;
                 for(int gridCol = 0; gridCol < line.length(); gridCol++){
                     grid.set(gridRow, gridCol, line.substr(gridCol, 1));
+                }
+                if (count >= row + 1) {
+                    break;
                 }
             }
             count++;
