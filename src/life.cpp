@@ -1,4 +1,7 @@
 /* Game of Life assignment for CS106B in Stanford Summer Session
+ * Extra features:
+ *  - Add random world generator
+ *  - Make tick function detect stable world to stop extra calculations and animations
  * Authors: Bruce Yang and Kevin Li
  * Description: The Game of Life is a simulation by British mathematician J. H. Conway in 1970. The game models
  * the life cycle of bacteria using a two-dimensional grid of cells. Given an initial pattern, the game
