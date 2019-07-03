@@ -23,12 +23,16 @@ using namespace std;
 
 const int MAX_ROW_LENGTH = 50;
 const int MAX_COLUMN_LENGTH = 50;
+const int MAX_STATS_TRIALS = 300;
 
 void introduce();
 void runGame();
 bool promptForInput(ifstream& file);
 void initializeGame(Grid<string>& grid);
-bool tick(Grid<string>& grid);
+int findDuplicatedGrid(Grid<string> grid, Vector<Grid<string>> grids);
+int numberOfLiveCells(Grid<string> grid);
+void statistics(const Grid<string>& grid);
+bool tick(Grid<string>& grid, bool isPrintingGrid = true);
 void promptAction(Grid<string>& grid);
 void loadAnotherFile();
 void animate(int frames, Grid<string>& grid);
@@ -179,7 +183,7 @@ void updateGUI(const Grid<string>& grid) {
  * @param grid the simulation grid
  */
 void promptAction(Grid<string>& grid) {
-    string actionName = toLowerCase(getLine("a)nimate, t)ick, q)uit? "));
+    string actionName = toLowerCase(getLine("a)nimate, t)ick, s)tatistics, q)uit? "));
     if (actionName == "t" || actionName == "") {
         bool keepRunning = tick(grid);
         if (!keepRunning) { // the grid is stable
@@ -190,6 +194,8 @@ void promptAction(Grid<string>& grid) {
         if (frames > 0) {
             animate(frames, grid);
         }
+    } else if (actionName == "s") {
+        statistics(grid);
     } else if (actionName == "q") {
         loadAnotherFile();
         return;
@@ -206,6 +212,77 @@ void loadAnotherFile() {
     if (getYesOrNo("Load another file? (y/n) ")) {
         runGame();
     }
+}
+
+void statistics(const Grid<string>& grid) {
+    Grid<string> copy;
+    copyGrid(grid, copy);
+    Vector<Grid<string>> grids;
+    int lastGenerationIndex = MAX_STATS_TRIALS - 1;
+    int duplicatedIndex = -1;
+    for (int i = 0; i < MAX_STATS_TRIALS; i++) {
+        tick(copy, false);
+        duplicatedIndex = findDuplicatedGrid(copy, grids);
+        if (duplicatedIndex >= 0) {
+            lastGenerationIndex = i - 1;
+            break;
+        } else {
+            Grid<string> copyOfCopy;
+            copyGrid(copy, copyOfCopy);
+            grids.add(copyOfCopy);
+        }
+    }
+    if (duplicatedIndex >= 0) {
+        if (duplicatedIndex == lastGenerationIndex) {
+            if (numberOfLiveCells(copy) == 0) { // all cells are dead
+                cout << "All cells are dead!" << endl;
+            } else {
+                cout << "Stable grid found at frame " << duplicatedIndex << "." << endl;
+            }
+        } else {
+            cout << "Pattern found between frames " << duplicatedIndex << " and " <<
+                    lastGenerationIndex << "." << endl;
+        }
+        string actionName = toLowerCase(getLine("p)rint or a)nimate the pattern frames? (type no to skip) "));
+        if (startsWith(actionName, "p")) {
+            for (int j = duplicatedIndex; j < lastGenerationIndex + 1; j++) {
+                printGrid(grids[j]);
+                cout << endl;
+            }
+        } else if (startsWith(actionName, "a")) {
+            for (int j = duplicatedIndex; j < lastGenerationIndex + 1; j++) {
+                printGrid(grids[j]);
+                pause(100);
+                clearConsole();
+            }
+        } else if (startsWith(actionName, "n")) {
+
+        }
+   } else {
+        cout << "No pattern found. Simulation ends at " << lastGenerationIndex << " frames." << endl;
+        if (getYesOrNo("Print the last frame? (y/n) ")) {
+            printGrid(copy);
+        }
+    }
+}
+
+int numberOfLiveCells(Grid<string> grid) {
+    int numOfLiveCells = 0;
+    for (string cell : grid) {
+        if (cell == "X") {
+            numOfLiveCells ++;
+        }
+    }
+    return numOfLiveCells;
+}
+
+int findDuplicatedGrid(Grid<string> grid, Vector<Grid<string>> grids) {
+    for (int i = 0; i < grids.size(); i++) {
+        if (grids[i] == grid) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /*
@@ -234,10 +311,9 @@ void animate(int frames, Grid<string>& grid) {
  * @param  grid the simulation grid
  * @return true if the grid changes after this generation and false if the grid is stable
  */
-bool tick(Grid<string>& grid) {
+bool tick(Grid<string>& grid, bool isPrintingGrid) {
     Grid<string> copy(0, 0);
     copyGrid(grid, copy);
-    LifeGUI::resize(grid.numRows(), grid.numCols());
     for (int r = 0; r < grid.numRows(); r++) {
         for (int c = 0; c < grid.numCols(); c++) {
             singleCell(copy, grid, r, c);
@@ -246,8 +322,9 @@ bool tick(Grid<string>& grid) {
     if (grid == copy) { // no change after this generation
         return false;
     } else {
-        LifeGUI::repaint();
-        printGrid(grid);
+        if (isPrintingGrid) {
+            printGrid(grid);
+        }
         return true;
     }
 }
@@ -264,9 +341,7 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
     if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
         killCell(r, c, grid);
     } else if (numOfNeighbors == 2) {
-        if (isCellOccupied(r, c, copy)) {
-            LifeGUI::fillCell(r, c);
-        }
+        // the cell stays the same
     } else if (numOfNeighbors == 3) {
         createCell(r, c, grid);
     }
@@ -280,7 +355,6 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
  */
 void createCell(int r, int c, Grid<string>& grid) {
     grid[r][c] = "X";
-    LifeGUI::fillCell(r, c);
 }
 
 /*
@@ -358,12 +432,17 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
  * @param grid the grid to print
  */
 void printGrid(const Grid<string>& grid) {
+    LifeGUI::resize(grid.numRows(), grid.numCols());
     string output = "";
     for (int r = 0; r < grid.numRows(); r ++) {
         for (int c = 0; c < grid.numCols(); c ++) {
             output += grid[r][c];
+            if (isCellOccupied(r, c, grid)) {
+                LifeGUI::fillCell(r, c);
+            }
         }
         output += "\n";
     }
     cout << output << flush;
+    LifeGUI::repaint();
 }
