@@ -2,6 +2,7 @@
  * Extra features:
  *  - Add random world generator
  *  - Make tick function detect stable world to stop extra calculations and animations
+ *  - Add statistics option for finding patterns in the simulation
  * Authors: Bruce Yang and Kevin Li
  * Description: The Game of Life is a simulation by British mathematician J. H. Conway in 1970. The game models
  * the life cycle of bacteria using a two-dimensional grid of cells. Given an initial pattern, the game
@@ -215,6 +216,14 @@ void loadAnotherFile() {
     }
 }
 
+/*
+ * Find patterns in the simulation.
+ *
+ * Stable, dead, or repeating grids can all be detected.
+ * If found, users have option to either print or animate the repeated pattern.
+ *
+ * @param grid the simulation grid
+ */
 void statistics(const Grid<string>& grid) {
     Grid<string> copy;
     copyGrid(grid, copy);
@@ -267,6 +276,11 @@ void statistics(const Grid<string>& grid) {
     }
 }
 
+/*
+ * Calculate the number of living cells in the grid.
+ * @param  grid the simulation grid
+ * @return the number of living cells
+ */
 int numberOfLiveCells(Grid<string> grid) {
     int numOfLiveCells = 0;
     for (string cell : grid) {
@@ -277,6 +291,12 @@ int numberOfLiveCells(Grid<string> grid) {
     return numOfLiveCells;
 }
 
+/*
+ * Find duplicated grid in a vector of old grids.
+ * @param  grid  the grid to look for
+ * @param  grids the vector of old generation grids
+ * @return the index of the duplicated grid found in the grids vector or -1 if not found
+ */
 int findDuplicatedGrid(Grid<string> grid, Vector<Grid<string>> grids) {
     for (int i = 0; i < grids.size(); i++) {
         if (grids[i] == grid) {
@@ -429,7 +449,7 @@ void copyGrid(const Grid<string>& original, Grid<string>& copy) {
 }
 
 /*
- * Print a grid in 2D
+ * Print a grid in 2D in both the console and GUI
  * @param grid the grid to print
  */
 void printGrid(const Grid<string>& grid) {
