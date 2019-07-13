@@ -362,7 +362,11 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
     if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
         degradeCell(r, c, grid);
     } else if (numOfNeighbors == 2) {
-        generateCell(r, c, grid);
+        if (randomChance(0.35)) { // 0.40 definitely works for glider and simple
+            generateCell(r, c, grid);
+        } else {
+            degradeCell(r, c, grid);
+        }
     } else if (numOfNeighbors == 3) {
         generateCell(r, c, grid);
     }
