@@ -473,8 +473,12 @@ void printGrid(const Grid<string>& grid) {
     for (int r = 0; r < grid.numRows(); r ++) {
         for (int c = 0; c < grid.numCols(); c ++) {
             output += grid[r][c];
-            if (isCellOccupied(r, c, grid)) {
-                LifeGUI::fillCell(r, c);
+            if (grid[r][c] == "X") { // black
+                LifeGUI::fillCell(r, c, "#000000");
+            } else if (grid[r][c] == "O") { // dimgray
+                LifeGUI::fillCell(r, c, "#696969");
+            } else if (grid[r][c] == "C") { // lightgray
+                LifeGUI::fillCell(r, c, "#D3D3D3");
             }
         }
         output += "\n";
