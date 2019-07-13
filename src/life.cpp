@@ -40,8 +40,8 @@ void animate(int frames, Grid<string>& grid);
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c);
 bool isCellOccupied(int r, int c, const Grid<string>& copy);
 int getNumOfNeighbors(int r, int c, const Grid<string>& copy);
-void killCell(int r, int c, Grid<string>& copy);
-void createCell(int r, int c, Grid<string>& grid);
+void degradeCell(int r, int c, Grid<string>& copy);
+void generateCell(int r, int c, Grid<string>& grid);
 void copyGrid(const Grid<string>& original, Grid<string>& copy);
 void printGrid(const Grid<string>& grid);
 void showGUI(const Grid<string>& grid);
@@ -360,11 +360,11 @@ bool tick(Grid<string>& grid, bool isPrintingGrid) {
 void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
     int numOfNeighbors = getNumOfNeighbors(r, c, copy);
     if (numOfNeighbors <= 1 || numOfNeighbors >= 4) {
-        killCell(r, c, grid);
+        degradeCell(r, c, grid);
     } else if (numOfNeighbors == 2) {
-        // the cell stays the same
+        generateCell(r, c, grid);
     } else if (numOfNeighbors == 3) {
-        createCell(r, c, grid);
+        generateCell(r, c, grid);
     }
 }
 
@@ -374,8 +374,12 @@ void singleCell(const Grid<string>& copy, Grid<string>& grid, int r, int c) {
  * @param c    the column index of the cell to create
  * @param grid the simulation grid
  */
-void createCell(int r, int c, Grid<string>& grid) {
-    grid[r][c] = "X";
+void generateCell(int r, int c, Grid<string>& grid) {
+    if (grid[r][c] == "-") {
+        grid[r][c] = "X";
+    } else {
+        degradeCell(r, c, grid);
+    }
 }
 
 /*
@@ -384,8 +388,14 @@ void createCell(int r, int c, Grid<string>& grid) {
  * @param c    the column index of the cell to create
  * @param grid the simulation grid
  */
-void killCell(int r, int c, Grid<string>& grid) {
-    grid[r][c] = "-";
+void degradeCell(int r, int c, Grid<string>& grid) {
+    if (grid[r][c] == "X") {
+        grid[r][c] = "O";
+    } else if (grid[r][c] == "O") {
+        grid[r][c] = "C";
+    } else if (grid[r][c] == "C"){
+        grid[r][c] = "-";
+    }
 }
 
 /*
@@ -417,8 +427,13 @@ bool isCellOccupied(int r, int c, const Grid<string>& copy) {
 
     if (cell == "X") {
         return true;
+    } else if (cell == "O") {
+        return true;
+    } else if (cell == "C") {
+        return false;
+    } else {
+        return false;
     }
-    return false;
 }
 
 /*

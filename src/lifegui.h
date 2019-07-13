@@ -19,6 +19,8 @@
 
 #include "gwindow.h"
 
+using namespace std;
+
 /**
  * The LifeGUI class is a graphical user interface for the Game of Life program.
  */
@@ -43,7 +45,7 @@ public:
      * If the location given is not in bounds, an error is thrown.
      * A cell cannot be un-drawn; to make that area white again, call clear().
      */
-    static void fillCell(int row, int col);
+    static void fillCell(int row, int col, string color="#000000");
 
     /**
      * Sets up the state of the GUI and pops up the GUI window on the screen.

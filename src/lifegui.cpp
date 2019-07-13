@@ -20,6 +20,8 @@
 #include "gwindow.h"
 #include "map.h"
 
+using namespace std;
+
 GWindow* LifeGUI::window = nullptr;
 const int LifeGUI::WINDOW_WIDTH = 600;
 const int LifeGUI::WINDOW_HEIGHT = 500;
@@ -74,7 +76,7 @@ void LifeGUI::clear() {
 /*
  *
  */
-void LifeGUI::fillCell(int row, int col) {
+void LifeGUI::fillCell(int row, int col, string color) {
     if (!isEnabled) {
         return;
     }
@@ -82,10 +84,13 @@ void LifeGUI::fillCell(int row, int col) {
     if (row < 0 || row >= rows || col < 0 || col >= cols) {
         error("LifeGUI::fillCell illegal row/col");
     }
+    string currentColor = window->getColor();
+    window->setColor(color);
     window->fillOval(upperLeftX + col * cellDiameter + 1,
                      upperLeftY + row * cellDiameter + 1,
                      cellDiameter - 2,
                      cellDiameter - 2);
+    window->setColor(currentColor);
 }
 
 void LifeGUI::initialize() {
