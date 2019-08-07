@@ -1,6 +1,8 @@
 # Game of Life
 Game of Life written in C++ as an [assignment](https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1198/assignments/life.html) for CS106B at Stanford Summer Session.
 
+![Conway's Game of Life Demo](./res/life-gui-screenshot.png)
+
 # Authors
 Bruce Yang and Kevin Li
 
